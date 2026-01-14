@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: graphql-api-ingress
+  labels:
+    app: graphql-api
+  annotations:
+    # Annotations pour nginx-ingress (adapter selon votre ingress controller)
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "Content-Type, Authorization"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: graphql-api.example.com  # Adapter selon votre domaine
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: graphql-api-service
+                port:
+                  number: 8002
+  # Optionnel: Configuration TLS
+  # tls:
+  #   - hosts:
+  #       - graphql-api.example.com
+  #     secretName: graphql-api-tls

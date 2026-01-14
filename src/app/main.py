@@ -13,7 +13,8 @@ from app.graphql.queries import Query
 app = FastAPI(
     title="Movie AI GraphQL API",
     description="API GraphQL pour l'analyse de films par IA",
-    version="1.0.0"
+    version="1.0.0",
+    debug=settings.DEBUG,
 )
 
 # CORS middleware pour permettre les requêtes depuis n'importe quelle origine
@@ -36,9 +37,25 @@ schema = strawberry.Schema(
 graphql_app = GraphQLRouter(schema, context_getter=get_context)
 app.include_router(graphql_app, prefix="/graphql")
 
+
 @app.get("/", tags=["Root"])
 def read_root():
     return {"message": "Bienvenue sur l'API de l'Analyseur IA de films. Rendez-vous sur /graphql"}
 
+
+@app.get("/health", tags=["Health"])
+def health_check():
+    """Endpoint de health check pour Kubernetes liveness/readiness probes."""
+    return {
+        "status": "healthy",
+        "service": settings.PROJECT_NAME,
+    }
+
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    uvicorn.run(
+        app,
+        host=settings.HOST,
+        port=settings.PORT,
+        log_level=settings.LOG_LEVEL,
+    )

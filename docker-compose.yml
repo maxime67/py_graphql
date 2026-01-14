@@ -1,0 +1,41 @@
+services:
+  graphql-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: graphql-api
+    ports:
+      - "${PORT:-8002}:${PORT:-8002}"
+    environment:
+      # Configuration du projet
+      - PROJECT_NAME=${PROJECT_NAME:-FastAPI GraphQL LLM Project}
+      - DEBUG=${DEBUG:-false}
+      # Configuration du serveur
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8002}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - WORKERS=${WORKERS:-1}
+      # Configuration LLM - Utiliser le nom du service ou host.docker.internal
+      - LLM_CHAT_SERVER_BASE_URL=${LLM_CHAT_SERVER_BASE_URL:-http://host.docker.internal:1234/v1}
+      - LLM_CHAT_MODEL=${LLM_CHAT_MODEL:-qwen3-4b-instruct-2507}
+      - LLM_CHAT_TEMPERATURE=${LLM_CHAT_TEMPERATURE:-0.3}
+      - LLM_CHAT_API_KEY=${LLM_CHAT_API_KEY:-not-needed}
+      - LLM_CHAT_TIMEOUT=${LLM_CHAT_TIMEOUT:-60}
+      # Configuration Movie API - Utiliser le nom du service ou host.docker.internal
+      - MOVIE_API_BASE_URL=${MOVIE_API_BASE_URL:-http://host.docker.internal:8000/api/v1}
+      - MOVIE_API_TIMEOUT=${MOVIE_API_TIMEOUT:-30}
+      # Configuration CORS
+      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS:-["http://localhost:4200"]}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:${PORT:-8002}/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
