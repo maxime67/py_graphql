@@ -12,7 +12,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 # Variables d'environnement par défaut (peuvent être surchargées)
 ENV HOST=0.0.0.0 \
-    PORT=8002 \
+    PORT=8001 \
     LOG_LEVEL=info \
     WORKERS=1 \
     DEBUG=false

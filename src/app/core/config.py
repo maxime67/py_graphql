@@ -1,5 +1,3 @@
-from typing import List
-from pydantic import AnyHttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,7 +22,7 @@ class Settings(BaseSettings):
 
     # Configuration du serveur
     HOST: str = "0.0.0.0"
-    PORT: int = 8002
+    PORT: int = 8001
     LOG_LEVEL: str = "info"
     WORKERS: int = 1
 
@@ -39,8 +37,6 @@ class Settings(BaseSettings):
     MOVIE_API_BASE_URL: str = "http://127.0.0.1:8000/api/v1"
     MOVIE_API_TIMEOUT: int = 30
 
-    # Configuration CORS
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
     # Configuration Health Check
     HEALTH_CHECK_PATH: str = "/health"

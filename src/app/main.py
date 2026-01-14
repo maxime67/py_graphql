@@ -17,10 +17,10 @@ app = FastAPI(
     debug=settings.DEBUG,
 )
 
-# CORS middleware pour permettre les requêtes depuis n'importe quelle origine
+# CORS middleware - allow all origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[str(origin).rstrip('/') for origin in settings.BACKEND_CORS_ORIGINS] if settings.BACKEND_CORS_ORIGINS else ["*"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

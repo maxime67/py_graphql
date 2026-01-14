@@ -1,19 +1,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: graphql-api-config
+  name: api-graphql-config
+  namespace: filmapi
   labels:
-    app: graphql-api
+    app.kubernetes.io/name: api-graphql
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: filmapi-stack
 data:
-  # Configuration du projet
   PROJECT_NAME: "FastAPI GraphQL LLM Project"
   DEBUG: "false"
-
-  # Configuration du serveur
   HOST: "0.0.0.0"
-  PORT: "8002"
+  PORT: "8001"
   LOG_LEVEL: "info"
   WORKERS: "2"
+  HEALTH_CHECK_PATH: "/health"
 
   # Configuration LLM (adapter selon votre infrastructure)
   LLM_CHAT_SERVER_BASE_URL: "http://lm-studio-service:1234/v1"
@@ -21,9 +22,7 @@ data:
   LLM_CHAT_TEMPERATURE: "0.3"
   LLM_CHAT_TIMEOUT: "60"
 
-  # Configuration Movie API (adapter selon votre infrastructure)
-  MOVIE_API_BASE_URL: "http://movie-api-service:8000/api/v1"
+  # Configuration REST API interne (même namespace)
+  MOVIE_API_BASE_URL: "http://api-rest-service:8000/api/v1"
   MOVIE_API_TIMEOUT: "30"
 
-  # Configuration CORS (adapter selon votre frontend)
-  BACKEND_CORS_ORIGINS: '["http://localhost:4200"]'
